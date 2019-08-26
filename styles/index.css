@@ -4,12 +4,20 @@ body {
   grid-template-columns: 1fr 4fr;
 }
 
+.searchResults {
+  background-color: green;
+  max-height: 5%;
+}
+
 #nav {
-  display: grid;
-  grid-template-columns: 1fr;
+  height: 100vh;
   background-color: blue;
 }
 
 #map {
-  background-color: red;
+  height: 100vh;
+}
+
+#search {
+  max-height: 5%;
 }

@@ -1,6 +1,24 @@
 const searchBar = document.querySelector("#search");
 const navBar = document.querySelector("#nav");
+
+const accessKey =
+  "pk.eyJ1IjoiZHlsYW5oYW1hZGEiLCJhIjoiY2p6ZzN4Nm4yMGZlMTNibG5rZHgxaWlweiJ9.sq7TBW2_ZeVF588ALeME-A";
+mapboxgl.accessToken = accessKey;
+
 let locationArr = [];
+
+let map = new mapboxgl.Map({
+  container: "map",
+  style: "mapbox://styles/mapbox/light-v9",
+  bounds: [
+    -79.54520857971113,
+    43.58839628520158,
+    -79.28123455620378,
+    43.75551366310037
+  ]
+});
+
+searchBar.addEventListener("keyup", keyStrokes);
 
 /* Callback function for the search bar's keydown event listener that
 calls several other functions to update drop-down menu and update map */
@@ -18,8 +36,6 @@ locationArr variable */
 function geoApiCall(searchVal) {
   // Use regedit to format white space in search result
   const formattedSearch = searchVal.replace(/\s/g, `%20`);
-  const accessKey =
-    "pk.eyJ1IjoiZHlsYW5oYW1hZGEiLCJhIjoiY2p6ZzN4Nm4yMGZlMTNibG5rZHgxaWlweiJ9.sq7TBW2_ZeVF588ALeME-A";
   const apiUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${formattedSearch}.json?proximity=-79.38463116005312,43.652681912152616&bbox=-79.45205426676789,43.62528813725265,-79.31853054929633,43.697591723318226&access_token=${accessKey}`;
 
   if (formattedSearch) {
@@ -70,5 +86,3 @@ function dropDownMenu(locationArr) {
     });
   }
 }
-
-searchBar.addEventListener("keyup", keyStrokes);
