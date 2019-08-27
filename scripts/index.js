@@ -6,15 +6,18 @@ const accessKey =
 mapboxgl.accessToken = accessKey;
 
 let locationArr = [];
+let markersArr = [];
 
+/* Create a new map object, render it in the #map div, apply the 'light' 
+style, and center it on the city of Toronto */
 let map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/mapbox/light-v9",
   bounds: [
-    -79.54520857971113,
-    43.58839628520158,
-    -79.28123455620378,
-    43.75551366310037
+    -79.46677655444716,
+    43.637986557103204,
+    -79.36237086337621,
+    43.68208586998085
   ]
 });
 
@@ -28,6 +31,8 @@ function keyStrokes(event) {
   geoApiCall(searchVal);
 
   dropDownMenu(locationArr);
+
+  createMarkers(locationArr);
 }
 
 /* Makes a GET request to Mapbox's Geocoding API, formatted with
@@ -83,6 +88,30 @@ function dropDownMenu(locationArr) {
       newDiv.innerText = name;
 
       navBar.append(newDiv);
+    });
+  }
+}
+
+/* Updates the map object with dynamically-generated markers that
+use elements in locationArr */
+function createMarkers(locationArr) {
+  // Remove all markers on the map each time the function is called
+  if (markersArr.length > 0) {
+    markersArr.forEach(marker => {
+      marker.remove();
+    });
+
+    markersArr = [];
+  }
+
+  // Create a marker in the map object for each element in locationArr
+  if (locationArr.length > 0) {
+    locationArr.forEach(location => {
+      let marker = new mapboxgl.Marker()
+        .setLngLat(location.geometry.coordinates)
+        .addTo(map);
+
+      markersArr.push(marker);
     });
   }
 }

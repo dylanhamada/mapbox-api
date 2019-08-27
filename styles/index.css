@@ -6,7 +6,6 @@ body {
 
 .searchResults {
   background-color: green;
-  max-height: 5%;
 }
 
 #nav {
@@ -19,5 +18,4 @@ body {
 }
 
 #search {
-  max-height: 5%;
 }
