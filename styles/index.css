@@ -1,21 +1,49 @@
 body {
-  display: grid;
   margin: 0;
-  grid-template-columns: 1fr 4fr;
+  font-family: "Roboto", "Arial", sans-serif;
 }
 
 .searchResults {
-  background-color: green;
+  min-height: 2em;
+  margin-top: 1em;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.searchResults:hover {
+  background-color: #daecf2;
+}
+
+#parent {
+  margin: 0;
+}
+
+#menuButton {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
 }
 
 #nav {
-  height: 100vh;
-  background-color: blue;
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  z-index: 2;
+  background-color: #e4eaec;
 }
 
 #map {
   height: 100vh;
+  width: 100vw;
 }
 
 #search {
+  width: 100%;
+  height: 2em;
+  padding-left: 0.5em;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  box-shadow: none;
 }

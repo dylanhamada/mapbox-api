@@ -1,5 +1,6 @@
 const searchBar = document.querySelector("#search");
 const navBar = document.querySelector("#nav");
+const menuButton = document.querySelector("#menuButton");
 
 const accessKey =
   "pk.eyJ1IjoiZHlsYW5oYW1hZGEiLCJhIjoiY2p6ZzN4Nm4yMGZlMTNibG5rZHgxaWlweiJ9.sq7TBW2_ZeVF588ALeME-A";
@@ -7,6 +8,8 @@ mapboxgl.accessToken = accessKey;
 
 let locationArr = [];
 let markersArr = [];
+
+let menuHide = false;
 
 /* Create a new map object, render it in the #map div, apply the 'light' 
 style, and center it on the city of Toronto */
@@ -22,6 +25,7 @@ let map = new mapboxgl.Map({
 });
 
 searchBar.addEventListener("keyup", keyStrokes);
+menuButton.addEventListener("click", hideSearch);
 
 /* Callback function for the search bar's keydown event listener that
 calls several other functions to update drop-down menu and update map */
@@ -33,6 +37,8 @@ function keyStrokes(event) {
   dropDownMenu(locationArr);
 
   createMarkers(locationArr);
+
+  clickDropDown();
 }
 
 /* Makes a GET request to Mapbox's Geocoding API, formatted with
@@ -85,7 +91,7 @@ function dropDownMenu(locationArr) {
     locationName.forEach(name => {
       let newDiv = document.createElement("div");
       newDiv.className = "searchResults";
-      newDiv.innerText = name;
+      newDiv.innerHTML = name;
 
       navBar.append(newDiv);
     });
@@ -95,7 +101,7 @@ function dropDownMenu(locationArr) {
 /* Updates the map object with dynamically-generated markers that
 use elements in locationArr */
 function createMarkers(locationArr) {
-  // Remove all markers on the map each time the function is called
+  // Remove all markers on the map each time the function is called to 'refresh'
   if (markersArr.length > 0) {
     markersArr.forEach(marker => {
       marker.remove();
@@ -104,14 +110,46 @@ function createMarkers(locationArr) {
     markersArr = [];
   }
 
-  // Create a marker in the map object for each element in locationArr
+  // Create a marker and related popup in the map object for each element in locationArr
   if (locationArr.length > 0) {
     locationArr.forEach(location => {
+      let popup = new mapboxgl.Popup({ closeButton: true, closeOnClick: true })
+        .setLngLat(location.geometry.coordinates)
+        .setHTML(
+          `<p><strong>${location.text}</strong></p><p>${location.properties.address}</p>`
+        )
+        .addTo(map);
+
       let marker = new mapboxgl.Marker()
         .setLngLat(location.geometry.coordinates)
+        .setPopup(popup)
         .addTo(map);
 
       markersArr.push(marker);
     });
+  }
+}
+
+function clickDropDown() {
+  let searchArr = document.querySelectorAll(".searchResults");
+
+  searchArr.forEach((result, index) => {
+    result.addEventListener("click", () => {
+      markersArr[index].togglePopup();
+    });
+  });
+}
+
+function hideSearch() {
+  let nav = document.querySelector("#nav");
+
+  if (menuHide) {
+    menuHide = false;
+
+    nav.style.display = "block";
+  } else {
+    menuHide = true;
+
+    nav.style.display = "none";
   }
 }
